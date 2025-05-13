@@ -4,7 +4,7 @@ import Project from "@/models/Project";
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "16mb",
+      sizeLimit: "32mb",
     },
   },
 };
@@ -22,14 +22,16 @@ export default async function handler(req, res) {
       /** ✅ GET - دریافت پروژه یا همه پروژه‌ها */
       case "GET":
         console.log("🔍 Fetching projects...");
-        
+
         if (id) {
           console.log(`🔍 Fetching project with id: ${id}`);
           const project = await Project.findById(id);
 
           if (!project) {
             console.log("⛔ Project not found");
-            return res.status(404).json({ success: false, error: "Project not found" });
+            return res
+              .status(404)
+              .json({ success: false, error: "Project not found" });
           }
 
           return res.status(200).json({ success: true, data: project });
@@ -44,14 +46,21 @@ export default async function handler(req, res) {
         const { title, link, category, sections } = req.body;
 
         if (!title || !category || !sections) {
-          return res.status(400).json({ success: false, error: "All fields are required" });
+          return res
+            .status(400)
+            .json({ success: false, error: "All fields are required" });
         }
 
         // بررسی Base64 تصاویر
         const sectionKeys = ["section1", "section2", "section3", "section4"];
         for (let key of sectionKeys) {
           if (!sections[key].image.startsWith("data:image/")) {
-            return res.status(400).json({ success: false, error: `Invalid image format in ${key}` });
+            return res
+              .status(400)
+              .json({
+                success: false,
+                error: `Invalid image format in ${key}`,
+              });
           }
         }
 
@@ -64,14 +73,20 @@ export default async function handler(req, res) {
       /** ✅ PUT - ویرایش پروژه */
       case "PUT":
         if (!id) {
-          return res.status(400).json({ success: false, error: "Project ID is required" });
+          return res
+            .status(400)
+            .json({ success: false, error: "Project ID is required" });
         }
 
         console.log(`🛠️ Updating project with id: ${id}`);
-        const updatedProject = await Project.findByIdAndUpdate(id, req.body, { new: true });
+        const updatedProject = await Project.findByIdAndUpdate(id, req.body, {
+          new: true,
+        });
 
         if (!updatedProject) {
-          return res.status(404).json({ success: false, error: "Project not found" });
+          return res
+            .status(404)
+            .json({ success: false, error: "Project not found" });
         }
 
         console.log("✅ Project updated:", updatedProject);
@@ -80,21 +95,29 @@ export default async function handler(req, res) {
       /** ✅ DELETE - حذف پروژه */
       case "DELETE":
         if (!id) {
-          return res.status(400).json({ success: false, error: "Project ID is required" });
+          return res
+            .status(400)
+            .json({ success: false, error: "Project ID is required" });
         }
 
         console.log(`🗑️ Deleting project with id: ${id}`);
         const deletedProject = await Project.findByIdAndDelete(id);
 
         if (!deletedProject) {
-          return res.status(404).json({ success: false, error: "Project not found" });
+          return res
+            .status(404)
+            .json({ success: false, error: "Project not found" });
         }
 
         console.log("✅ Project deleted:", deletedProject);
-        return res.status(200).json({ success: true, message: "Project deleted successfully" });
+        return res
+          .status(200)
+          .json({ success: true, message: "Project deleted successfully" });
 
       default:
-        return res.status(405).json({ success: false, error: "Method not allowed" });
+        return res
+          .status(405)
+          .json({ success: false, error: "Method not allowed" });
     }
   } catch (err) {
     console.log("🚨 Server Error:", err.message);
