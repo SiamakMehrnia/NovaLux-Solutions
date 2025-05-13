@@ -1,0 +1,32 @@
+export const projectsData = [
+  {
+    id: "1",
+    title: "Luxury E-Commerce",
+    description: "A luxury e-commerce platform for premium fashion brands.",
+    image: "https://source.unsplash.com/800x600/?fashion,luxury",
+    createdAt: "2025-05-13",
+    category: "E-Commerce",
+    link: "https://luxury-shop.com",
+    github: "https://github.com/yourusername/luxury-ecommerce",
+  },
+  {
+    id: "2",
+    title: "NovaLux CRM",
+    description: "A customer management system for high-end clients.",
+    image: "https://source.unsplash.com/800x600/?business,crm",
+    createdAt: "2025-05-10",
+    category: "CRM",
+    link: "https://novalux-crm.com",
+    github: "https://github.com/yourusername/novalux-crm",
+  },
+  {
+    id: "3",
+    title: "Tech Blog",
+    description: "A modern tech blog with stylish UI and animations.",
+    image: "https://source.unsplash.com/800x600/?blog,technology",
+    createdAt: "2025-05-08",
+    category: "Blog",
+    link: "https://tech-blog.com",
+    github: "https://github.com/yourusername/tech-blog",
+  },
+];
