@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Meteors } from "./magicui/meteors";
 import { FlickeringGrid } from "./magicui/flickering-grid.jsx";
+import { AnimatedGridPattern } from "./magicui/animated-grid-pattern";
 
 const Intro = () => {
   return (
@@ -11,10 +12,10 @@ const Intro = () => {
     >
         {/* Flickering Grid as Background */}
       <div className="absolute inset-0 z-0">
-        <FlickeringGrid className="w-full h-full bg-white" />
+        < AnimatedGridPattern className="w-full h-full bg-gradient-to-b from-[#1f1f1f] to-[#2e2e2e]" />
       </div>
 
-      <div className="bg-black w-full max-w-[600px] h-[300px] md:h-[350px] lg:h-[400px] flex justify-center items-center shadow-2xl rounded-2xl relative overflow-hidden p-10 lg:p-12">
+      <div className="bg-white w-full max-w-[600px] h-[300px] md:h-[350px] lg:h-[400px] flex justify-center items-center shadow-2xl rounded-2xl relative overflow-hidden p-10 lg:p-12">
         {/* Shining Meteors */}
         <Meteors
           number={15}
@@ -28,7 +29,7 @@ const Intro = () => {
 
         {/* AlphaWeb Text with Pulse Animation and Shadow */}
         <motion.h1
-          className="text-3xl md:text-4xl lg:text-5xl font-bold text-with z-10 drop-shadow-lg"
+          className="text-3xl text-black md:text-4xl lg:text-5xl font-bold text-with z-10 drop-shadow-lg"
           initial={{ scale: 1 }}
           animate={{
             scale: [1, 1.1, 1],

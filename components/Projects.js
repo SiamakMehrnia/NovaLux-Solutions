@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { ShineBorder } from "./magicui/shine-border.jsx";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -24,7 +25,7 @@ const Projects = () => {
   return (
     <section
       id="projects"
-      className="h-screen bg-gradient-to-b from-[#1f1f1f] to-[#2e2e2e] flex justify-center items-center overflow-hidden p-10"
+      className="h-auto bg-gradient-to-b from-[#1f1f1f] to-[#2e2e2e] flex justify-center items-center overflow-hidden p-10"
     >
       <div className="w-full overflow-x-auto scrollbar-hide flex space-x-6 p-6">
         {projects.length === 0 ? (
@@ -33,8 +34,9 @@ const Projects = () => {
           projects.map((project) => (
             <div
               key={project._id}
-              className="min-w-[250px] max-w-[250px] bg-[#333333] p-4 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 hover:bg-[#444444] cursor-pointer flex flex-col"
+              className="min-w-[250px] max-w-[250px] bg-[#333333] p-4 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 hover:bg-[#444444] cursor-pointer flex flex-col relative h-[500px] w-full overflow-hidden"
             >
+              <ShineBorder className="bg-white" />
               <div className="flex-1 mb-4">
                 <img
                   src={project.sections.section1.image}
