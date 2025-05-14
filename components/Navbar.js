@@ -20,7 +20,7 @@ const Navbar = () => {
       console.warn(`Section with id "${sectionId}" not found`);
     }
 
-    setIsOpen(false);
+    setIsOpen(false); // بستن منو پس از کلیک
   };
 
   const menuItems = [
@@ -34,13 +34,12 @@ const Navbar = () => {
     <nav className="bg-[#1f1f1f] text-white fixed w-full z-50 shadow-lg">
       <div className="flex justify-between items-center max-w-7xl mx-auto h-16 px-6">
         {/* Logo */}
-        <motion.h1
-          className="text-xl font-semibold bg-gradient-to-r from-gray-300 via-gray-500 to-gray-700 text-transparent bg-clip-text cursor-pointer"
+        <h1
+          className="text-xl font-semibold cursor-pointer"
           onClick={() => scrollToSection("home")}
-          style={{ letterSpacing: "1px", fontWeight: 600 }}
         >
           NovaLux-Solutions
-        </motion.h1>
+        </h1>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-10">
@@ -56,7 +55,7 @@ const Navbar = () => {
         </ul>
 
         {/* Hamburger Icon for Mobile */}
-        <div className="md:hidden cursor-pointer p-2" onClick={toggleMenu}>
+        <div className="md:hidden cursor-pointer p-2 z-50" onClick={toggleMenu}>
           {isOpen ? <X size={30} /> : <Menu size={34} />}
         </div>
       </div>
@@ -65,16 +64,16 @@ const Navbar = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="md:hidden bg-[#1f1f1f] text-white flex flex-col items-center overflow-hidden z-40"
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="fixed top-16 left-0 w-full bg-[#1f1f1f] text-white flex flex-col items-center z-40 py-4"
           >
             {menuItems.map((item) => (
               <div
                 key={item.id}
-                className="py-3 cursor-pointer hover:text-gray-300 transition duration-300 border-b border-gray-600 w-full text-center"
+                className="py-3 cursor-pointer hover:text-gray-300 transition duration-300 w-full text-center"
                 onClick={() => scrollToSection(item.id)}
               >
                 {item.name}
