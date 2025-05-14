@@ -14,14 +14,43 @@ const ProjectForm = () => {
 
   const categories = ["E-Commerce", "CRM", "Blog", "Portfolio"];
 
-  /** تبدیل فایل به Base64 */
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
+  /** آپلود فایل به Cloudinary */
+  const uploadToCloudinary = async (file) => {
+    if (!file) {
+      console.warn("No file provided for upload");
+      return "";
+    }
+
+    console.log("Uploading file to Cloudinary:", file);
+    console.log("File type:", file.type);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "novalux");
+
+    try {
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dr5h0ms9o/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      console.log("Upload Response:", data);
+
+      if (data.secure_url) {
+        console.log("Uploaded image URL:", data.secure_url);
+        return data.secure_url;
+      } else {
+        console.error("Cloudinary upload error:", data);
+        return "";
+      }
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      return "";
+    }
   };
 
   /** آپلود پروژه */
@@ -37,21 +66,40 @@ const ProjectForm = () => {
       return;
     }
 
+    console.log("Sections before upload:", sections);
+
     try {
-      // تبدیل تصاویر به Base64
+      Swal.fire({
+        title: "Uploading...",
+        text: "Please wait while your project is being uploaded.",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
       const sectionData = await Promise.all(
-        sections.map(async (section) => {
-          const base64Image = section.image
-            ? await convertToBase64(section.image)
-            : "";
-          return {
-            image: base64Image,
-            description: section.description,
-          };
+        sections.map(async (section, idx) => {
+          console.log(`Section ${idx + 1} image before upload:`, section.image);
+          if (section.image) {
+            const imageUrl = await uploadToCloudinary(section.image);
+            console.log(`Section ${idx + 1} image after upload:`, imageUrl);
+            return {
+              image: imageUrl || "",
+              description: section.description,
+            };
+          } else {
+            console.log(`Section ${idx + 1} has no image to upload.`);
+            return {
+              image: "",
+              description: section.description,
+            };
+          }
         })
       );
 
-      // ساختار داده‌ها
+      console.log("Section Data after upload:", sectionData);
+
       const payload = {
         title,
         link,
@@ -64,7 +112,8 @@ const ProjectForm = () => {
         },
       };
 
-      // ارسال به API
+      console.log("Payload being sent to API:", payload);
+
       const response = await fetch("/api/projects", {
         method: "POST",
         headers: {
@@ -82,7 +131,6 @@ const ProjectForm = () => {
           text: "Your project has been successfully uploaded.",
         });
 
-        // ریست فرم
         setTitle("");
         setLink("");
         setCategory("");
@@ -106,8 +154,23 @@ const ProjectForm = () => {
 
   /** تغییر فایل */
   const handleFileChange = (index, file) => {
+    if (!file) {
+      console.warn(`No file selected for section ${index + 1}`);
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      console.warn(`Selected file for section ${index + 1} is not an image:`, file.type);
+      return;
+    }
+
+    console.log(`File selected for section ${index + 1}:`, file);
+
     const updatedSections = [...sections];
-    updatedSections[index].image = file;
+    updatedSections[index] = {
+      ...updatedSections[index],
+      image: file,
+    };
     setSections(updatedSections);
   };
 
@@ -123,7 +186,6 @@ const ProjectForm = () => {
       <h2 className="text-2xl text-white mb-6">Upload New Project</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Title */}
         <div>
           <label className="block text-gray-300 mb-1">Title:</label>
           <input
@@ -135,7 +197,6 @@ const ProjectForm = () => {
           />
         </div>
 
-        {/* Link */}
         <div>
           <label className="block text-gray-300 mb-1">Project Link:</label>
           <input
@@ -147,7 +208,6 @@ const ProjectForm = () => {
           />
         </div>
 
-        {/* Category */}
         <div>
           <label className="block text-gray-300 mb-1">Category:</label>
           <select
@@ -164,7 +224,6 @@ const ProjectForm = () => {
           </select>
         </div>
 
-        {/* Sections */}
         {sections.map((section, index) => (
           <div key={index} className="bg-[#2e2e2e] p-4 rounded-lg mb-4">
             <h3 className="text-lg text-gray-300 mb-2">Section {index + 1}</h3>
@@ -173,6 +232,7 @@ const ProjectForm = () => {
               <label className="block text-gray-300 mb-1">Image:</label>
               <input
                 type="file"
+                accept="image/*"
                 onChange={(e) => handleFileChange(index, e.target.files[0])}
                 className="w-full p-2 bg-gray-800 text-white rounded"
               />
@@ -190,7 +250,6 @@ const ProjectForm = () => {
           </div>
         ))}
 
-        {/* Submit Button */}
         <div className="flex justify-center mt-6">
           <button
             type="submit"

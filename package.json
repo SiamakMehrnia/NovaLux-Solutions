@@ -12,6 +12,7 @@
     "@netlify/plugin-nextjs": "^5.10.7",
     "aos": "^2.3.4",
     "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.6.1",
     "clsx": "^2.1.1",
     "cobe": "^0.6.3",
     "cookie": "^1.0.2",
