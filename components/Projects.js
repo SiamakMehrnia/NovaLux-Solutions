@@ -41,7 +41,7 @@ const Projects = () => {
                 <img
                   src={project.sections.section1.image}
                   alt={project.title}
-                  className="w-full h-48 object-cover rounded-lg"
+                                   className="w-full h-full object-cover object-center rounded-lg"
                 />
               </div>
               <h3 className="text-lg text-white font-semibold mb-2">
@@ -49,7 +49,7 @@ const Projects = () => {
               </h3>
               <p className="text-gray-300 mb-4">{project.category}</p>
               <button
-                className="bg-[#FF7E00] text-white py-2 px-4 rounded-lg hover:bg-[#FF9100] transition"
+                                className="bg-[#00A8E8] text-white py-2 px-4 rounded-lg hover:bg-[#0077B6] transition transform hover:scale-105 shadow-lg hover:shadow-xl"
                 onClick={() => router.push(`/Projects/${project._id}`)}
               >
                 View Project

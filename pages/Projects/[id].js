@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
 const ProjectDetails = () => {
   const router = useRouter();
@@ -38,29 +39,36 @@ const ProjectDetails = () => {
   const sectionArray = Object.values(sections);
 
   return (
-    <div className="min-h-screen bg-black text-white p-10 space-y-12">
-      <h1 className="text-3xl font-bold mb-8 text-center">{title}</h1>
-      <p className="text-center text-gray-400 mb-8">Category: {category}</p>
-      <p className="text-center text-gray-500 mb-8">Created on: {new Date(createdAt).toLocaleDateString()}</p>
+    <div className="min-h-screen  text-white p-10 space-y-12">
+      <FlickeringGrid 
+        className="fixed inset-0 z-[-1] bg opacity-20 pointer-events-none bg-white" 
+        intensity={0.5}
+        speed={1.5}
+      />
+      <div className="bg-[#1f1f1f] p-6 rounded-lg shadow-lg mb-8 text-center">
+        <h1 className="text-3xl font-bold mb-4">{title}</h1>
+        <p className="text-lg text-gray-400 mb-2">Category: {category}</p>
+        <p className="text-sm text-gray-500">Created on: {new Date(createdAt).toLocaleDateString()}</p>
+      </div>
 
       {sectionArray.map((section, index) => (
         <div
           key={index}
-          className={`flex flex-col md:flex-row ${
+          className={`flex flex-col md:flex-row gap-10 mb-8 ${
             index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-          } items-center gap-10`}
+          } items-center`}
         >
           {/* Image */}
-          <div className="w-full md:w-1/2">
+          <div className="w-full md:w-1/2 overflow-hidden rounded-lg shadow-lg">
             <img
               src={section.image}
               alt={`Section ${index + 1}`}
-              className="w-full h-80 object-cover rounded-lg shadow-lg"
+              className="w-full h-auto object-contain"
             />
           </div>
 
           {/* Text */}
-          <div className="w-full md:w-1/2 space-y-4">
+          <div className="w-full md:w-1/2 space-y-4 bg-[#232323] p-4 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold">Section {index + 1}</h2>
             <p className="text-gray-300">{section.description}</p>
           </div>
